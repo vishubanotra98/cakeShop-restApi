@@ -1,25 +1,56 @@
 import { User } from "../models/User.js";
 import { Order } from "../models/Order.js";
 import { asyncError } from "../middlewares/errorMiddleware.js";
+import jwt from "jsonwebtoken";
 
 export const myProfile = (req, res, next) => {
   res.status(200).json({ success: true, user: req.user });
 };
 
-export const logout = (req, res, next) => {
-  req.session.destroy((err) => {
-    if (err) return next(err);
+// Register a new user
+export const registerUser = asyncError(async (req, res, next) => {
+  try {
+    const { name, username, password } = req.body;
+    const user = new User({ name, username, password });
 
-    res.clearCookie("connect.sid", {
-      secure: process.env.NODE_ENV === "development" ? false : true,
-      httpOnly: process.env.NODE_ENV === "development" ? false : true,
-      sameSite: process.env.NODE_ENV === "development" ? false : "none",
+    await user.save();
+
+    const token = jwt.sign({ username, role: "user" }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
     });
-    res.status(200).json({ message: "Logged Out" });
-  });
-};
 
+    res.status(201).json({ message: "User registered successfully", token });
+  } catch (error) {
+    next(error);
+  }
+});
 
+// Login user
+export const loginUser = asyncError(async (req, res, next) => {
+  const { username, password } = req.body;
+
+  try {
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.status(401).json({ message: "Authentication failed" });
+    }
+
+    if (user.password !== password) {
+      return res.status(401).json({ message: "Incorrect Password" });
+    }
+
+    const token = jwt.sign(
+      { username: user.username, id: user._id, role: user.role },
+      process.env.JWT_SECRET
+    );
+    res.json({message: "User Logged In successfully", token });
+  } catch (error) {
+    next(error)
+  }
+});
+
+// Admin Routes
 export const getAdminUsers = asyncError(async (req, res, next) => {
   const users = await User.find({});
 

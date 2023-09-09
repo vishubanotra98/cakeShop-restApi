@@ -1,7 +1,7 @@
 import express from "express";
 import {
+  authenticateToken,
   authorizeAdmin,
-  isAuthenticated,
 } from "../middlewares/authMiddleware.js";
 import {
   getAdminOrders,
@@ -15,21 +15,23 @@ import {
 
 const router = express.Router();
 
-router.post("/createorder", isAuthenticated, placeOrder);
 
-router.post("/createorderonline", isAuthenticated, placeOrderOnline);
 
-router.post("/paymentverification", isAuthenticated, paymentVerifivcation);
+router.post("/createorder", authenticateToken, placeOrder);
 
-router.get("/myorders", isAuthenticated, getMyOrders);
+router.post("/createorderonline", authenticateToken, placeOrderOnline);
 
-router.get("/order/:id", isAuthenticated, getOrderDetails);
+router.post("/paymentverification", authenticateToken, paymentVerifivcation);
+
+router.get("/myorders", authenticateToken, getMyOrders);
+
+router.get("/order/:id", authenticateToken, getOrderDetails);
 
 
 
 // Add Admin Middleware
-router.get("/admin/orders", isAuthenticated, authorizeAdmin, getAdminOrders);
+router.get("/admin/orders", authenticateToken, authorizeAdmin, getAdminOrders);
 
-router.get("/admin/order/:id", isAuthenticated, authorizeAdmin, processOrder);
+router.get("/admin/order/:id", authenticateToken, authorizeAdmin, processOrder);
 
 export default router;

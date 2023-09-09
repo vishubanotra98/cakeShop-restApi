@@ -1,38 +1,27 @@
 import express from "express";
-import passport from "passport";
 import {
   getAdminStats,
   getAdminUsers,
-  logout,
+  loginUser,
   myProfile,
+  registerUser,
 } from "../controllers/userController.js";
+
 import {
   authorizeAdmin,
-  isAuthenticated,
+  authenticateToken,
 } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.get(
-  "/googlelogin",
-  passport.authenticate("google", {
-    scope: ["profile"],
-  })
-);
+router.get("/me", authenticateToken, myProfile);
+router.post("/register", registerUser);
+router.post("/login", loginUser);
 
-router.get(
-  "/login",
-  passport.authenticate("google", {
-    successRedirect: process.env.FRONTEND_URL,
-  }),
-);
-
-router.get("/me", isAuthenticated, myProfile);
-router.get("/logout", logout);
 
 // Admin Routes
-router.get("/admin/users", isAuthenticated, authorizeAdmin, getAdminUsers);
+router.get("/admin/users", authenticateToken, authorizeAdmin, getAdminUsers);
 
-router.get("/admin/stats", isAuthenticated, authorizeAdmin, getAdminStats);
+router.get("/admin/stats", authenticateToken, authorizeAdmin, getAdminStats);
 
 export default router;

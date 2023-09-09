@@ -5,6 +5,9 @@ import { asyncError } from "../middlewares/errorMiddleware.js";
 import crypto from "crypto";
 import { Payment } from "../models/Payment.js";
 
+
+
+// Req.user will be used here
 export const placeOrder = asyncError(async (req, res, next) => {
   const {
     shippingInfo,
@@ -16,7 +19,7 @@ export const placeOrder = asyncError(async (req, res, next) => {
     totalAmount,
   } = req.body;
 
-  const user = req.user;
+  const user = req.user.id
 
   const orderOption = {
     shippingInfo,
@@ -37,6 +40,8 @@ export const placeOrder = asyncError(async (req, res, next) => {
   });
 });
 
+
+// Req.user will use here
 export const placeOrderOnline = asyncError(async (req, res, next) => {
   const {
     shippingInfo,
@@ -48,7 +53,7 @@ export const placeOrderOnline = asyncError(async (req, res, next) => {
     totalAmount,
   } = req.body;
 
-  const user = req.user;
+  const user = req.user.id;
 
   const orderOption = {
     shippingInfo,
@@ -74,6 +79,7 @@ export const placeOrderOnline = asyncError(async (req, res, next) => {
   });
 });
 
+// Razorpay
 export const paymentVerifivcation = asyncError(async (req, res, next) => {
   const {
     razorpay_payment_id,
@@ -113,9 +119,12 @@ export const paymentVerifivcation = asyncError(async (req, res, next) => {
   }
 });
 
+
+// Getting Orders 
+// req.user will be used here
 export const getMyOrders = asyncError(async (req, res, next) => {
   const orders = await Order.find({
-    user: req.user,
+    user: req.user.id,
   }).populate("user", "name");
 
   if (orders.length) {
@@ -126,6 +135,7 @@ export const getMyOrders = asyncError(async (req, res, next) => {
   } else res.send(next(new ErrorHandler("No Order found", 404)));
 });
 
+// Order Details
 export const getOrderDetails = asyncError(async (req, res, next) => {
   const order = await Order.findById(req.params.id).populate("user", "name");
 
@@ -137,6 +147,7 @@ export const getOrderDetails = asyncError(async (req, res, next) => {
   });
 });
 
+//Admin getting Orders 
 export const getAdminOrders = asyncError(async (req, res, next) => {
   const orders = await Order.find({}).populate("user", "name");
 
@@ -146,6 +157,7 @@ export const getAdminOrders = asyncError(async (req, res, next) => {
   });
 });
 
+// Order Processing
 export const processOrder = asyncError(async (req, res, next) => {
   const order = await Order.findById(req.params.id);
 
