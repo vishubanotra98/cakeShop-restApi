@@ -26,29 +26,34 @@ export const registerUser = asyncError(async (req, res, next) => {
 });
 
 // Login user
-export const loginUser = asyncError(async (req, res, next) => {
-  const { username, password } = req.body;
+// export const loginUser = asyncError(async (req, res, next) => {
+//   const { username, password } = req.body;
 
-  try {
-    const user = await User.findOne({ username });
+//   try {
+//     const user = await User.findOne({ username });
 
-    if (!user) {
-      return res.status(401).json({ message: "Authentication failed" });
-    }
+//     if (!user) {
+//       return res.status(401).json({ message: "Authentication failed" });
+//     }
 
-    if (user.password !== password) {
-      return res.status(401).json({ message: "Incorrect Password" });
-    }
+//     if (user.password !== password) {
+//       return res.status(401).json({ message: "Incorrect Password" });
+//     }
 
-    const token = jwt.sign(
-      { username: user.username, id: user._id, role: user.role },
-      process.env.JWT_SECRET
-    );
-    res.json({message: "User Logged In successfully", token });
-  } catch (error) {
-    next(error)
-  }
-});
+//     const token = jwt.sign(
+//       { username: user.username, id: user._id, role: user.role },
+//       process.env.JWT_SECRET
+//     );
+//     // res.json({message: "User Logged In successfully", token });
+//     res.cookie("token", token, {
+//       sameSite: "none",
+//       secure: false,
+//     });
+//     res.json({ message: "Login Successfully" });
+//   } catch (error) {
+//     next(error);
+//   }
+// });
 
 // Admin Routes
 export const getAdminUsers = asyncError(async (req, res, next) => {

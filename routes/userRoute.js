@@ -2,10 +2,10 @@ import express from "express";
 import {
   getAdminStats,
   getAdminUsers,
-  loginUser,
   myProfile,
   registerUser,
 } from "../controllers/userController.js";
+
 
 import {
   authorizeAdmin,
@@ -16,7 +16,6 @@ const router = express.Router();
 
 router.get("/me", authenticateToken, myProfile);
 router.post("/register", registerUser);
-router.post("/login", loginUser);
 
 
 // Admin Routes
