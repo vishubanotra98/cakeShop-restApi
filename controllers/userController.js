@@ -9,50 +9,45 @@ export const myProfile = (req, res, next) => {
 
 // Register a new user
 export const registerUser = asyncError(async (req, res, next) => {
-  try {
-    const { name, username, password } = req.body;
-    const user = new User({ name, username, password });
+  const { name, username, password } = req.body;
+  const user = new User({ name, username, password });
 
-    await user.save();
+  await user.save();
 
-    const token = jwt.sign({ username, role: "user" }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
+  const token = jwt.sign({ username, role: "user" }, process.env.JWT_SECRET, {
+    expiresIn: "1h",
+  });
 
-    res.status(201).json({ message: "User registered successfully", token });
-  } catch (error) {
-    next(error);
-  }
+  res.status(201).json({ message: "User registered successfully", token });
 });
-
 
 export const loginUser = asyncError(async (req, res, next) => {
   const { username, password } = req.body;
 
-  try {
-    const user = await User.findOne({ username, password });
-    if (!user) {
-      res.json({ message: "User not found" });
-    } else {
-      const token = jwt.sign(
-        {
-          username: user.username,
-          id: user._id,
-          role: user.role,
-        },
-        process.env.JWT_SECRET,
-        { expiresIn: "1hr" }
-      );
+  const user = await User.findOne({ username, password });
+  if (!user) {
+    res.json({ message: "User not found" });
+  } else {
+    const token = jwt.sign(
+      {
+        username: user.username,
+        id: user._id,
+        role: user.role,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "1hr" }
+    );
 
-      res.cookie("token", token, {
-        secure: true,
-        sameSite: "none",
-      });
-      res.json({ message: "User Logged In" });
-    }
-  } catch (error) {
-    next(error);
+    res.cookie("token", token, {
+      secure: true,
+      sameSite: "none",
+    });
+    res.json({ message: "User Logged In" });
   }
+});
+
+export const userLogout = asyncError(async (req, res, next) => {
+  res.cookie("token", "").json(true);
 });
 
 // Admin Routes

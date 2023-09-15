@@ -4,7 +4,8 @@ import {
   getAdminUsers,
   myProfile,
   registerUser,
-  loginUser
+  loginUser,
+  userLogout
 } from "../controllers/userController.js";
 
 
@@ -18,6 +19,7 @@ const router = express.Router();
 router.get("/me", authenticateToken, myProfile);
 router.post("/login", loginUser)
 router.post("/register", registerUser);
+router.post("/logout", userLogout)
 
 
 // Admin Routes
