@@ -12,7 +12,7 @@ dotenv.config({
   path: "./config/config.env",
 });
 
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+app.use(cors({ credentials: true, origin: "https://testingapp-mx0n.onrender.com" }));
 app.use(cookieParser());
 
 app.use(express.json());
