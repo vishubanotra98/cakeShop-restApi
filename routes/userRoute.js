@@ -4,6 +4,7 @@ import {
   getAdminUsers,
   myProfile,
   registerUser,
+  loginUser
 } from "../controllers/userController.js";
 
 
@@ -15,6 +16,7 @@ import {
 const router = express.Router();
 
 router.get("/me", authenticateToken, myProfile);
+router.post("/login", loginUser)
 router.post("/register", registerUser);
 
 

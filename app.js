@@ -3,8 +3,7 @@ import dotenv from "dotenv";
 import { errorMiddleware } from "./middlewares/errorMiddleware.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { User } from "./models/User.js";
-import jwt from "jsonwebtoken";
+
 
 const app = express();
 export default app;
@@ -23,34 +22,8 @@ app.use(
   })
 );
 
-app.post("/api/v1/login", async (req, res, next) => {
-  const { username, password } = req.body;
+app.set("trust proxy")
 
-  try {
-    const user = await User.findOne({ username, password });
-    if (!user) {
-      res.json({ message: "User not found" });
-    } else {
-      const token = jwt.sign(
-        {
-          username: user.username,
-          id: user._id,
-          role: user.role,
-        },
-        process.env.JWT_SECRET,
-        { expiresIn: "1hr" }
-      );
-
-      res.cookie("token", token, {
-        secure: false,
-        sameSite: "none",
-      });
-      res.json({ message: "User Logged In" });
-    }
-  } catch (error) {
-    next(error);
-  }
-});
 
 // Importing Routes
 import userRoute from "./routes/userRoute.js";

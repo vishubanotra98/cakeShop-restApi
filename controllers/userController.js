@@ -55,6 +55,35 @@ export const registerUser = asyncError(async (req, res, next) => {
 //   }
 // });
 
+export const loginUser = asyncError(async (req, res, next) => {
+  const { username, password } = req.body;
+
+  try {
+    const user = await User.findOne({ username, password });
+    if (!user) {
+      res.json({ message: "User not found" });
+    } else {
+      const token = jwt.sign(
+        {
+          username: user.username,
+          id: user._id,
+          role: user.role,
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: "1hr" }
+      );
+
+      res.cookie("token", token, {
+        secure: true,
+        sameSite: "none",
+      });
+      res.json({ message: "User Logged In" });
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Admin Routes
 export const getAdminUsers = asyncError(async (req, res, next) => {
   const users = await User.find({});
