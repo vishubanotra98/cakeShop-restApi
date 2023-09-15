@@ -47,7 +47,10 @@ export const loginUser = asyncError(async (req, res, next) => {
 });
 
 export const userLogout = asyncError(async (req, res, next) => {
-  res.cookie("token", "").json(true);
+  res.clearCookie("token", {
+    secure: true,
+    sameSite: "none"
+  }).json({message: "User Logged Out"});
 });
 
 // Admin Routes
