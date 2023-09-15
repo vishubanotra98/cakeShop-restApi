@@ -39,6 +39,7 @@ export const loginUser = asyncError(async (req, res, next) => {
     );
 
     res.cookie("token", token, {
+      path: "/login",
       secure: true,
       sameSite: "none",
     });
@@ -48,6 +49,7 @@ export const loginUser = asyncError(async (req, res, next) => {
 
 export const userLogout = asyncError(async (req, res, next) => {
   res.clearCookie("token", {
+    path: "/logout",
     secure: true,
     sameSite: "none"
   }).json({message: "User Logged Out"});
