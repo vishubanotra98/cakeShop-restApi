@@ -45,7 +45,7 @@ export const loginUser = asyncError(async (req, res, next) => {
       );
 
       res.cookie("token", token, {
-        secure: false,
+        secure: true,
         sameSite: "none",
       });
       res.json({ message: "User Logged In" });
