@@ -30,7 +30,7 @@ export const loginUser = asyncError(async (req, res, next) => {
   } else {
     const token = jwt.sign(
       {
-        name:user.name,
+        name: user.name,
         username: user.username,
         id: user._id,
         role: user.role,
@@ -40,18 +40,20 @@ export const loginUser = asyncError(async (req, res, next) => {
     );
 
     res.cookie("token", token, {
-      secure: true,
-      sameSite: "none",
+      secure: process.env.NODE_ENV === "development" ? false : true,
+      sameSite: process.env.NODE_ENV === "development" ? false : "none",
     });
     res.json({ message: "User Logged In" });
   }
 });
 
 export const userLogout = asyncError(async (req, res, next) => {
-  res.cookie("token", "", {
-    secure: true,
-    sameSite: "none"
-  }).json({message: "User Logged Out"});
+  res
+    .cookie("token", "", {
+      secure: process.env.NODE_ENV === "development" ? false : true,
+      sameSite: process.env.NODE_ENV === "development" ? false : "none",
+    })
+    .json({ message: "User Logged Out" });
 });
 
 // Admin Routes
