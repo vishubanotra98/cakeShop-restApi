@@ -121,7 +121,6 @@ export const paymentVerifivcation = asyncError(async (req, res, next) => {
 
 
 // Getting Orders 
-// req.user will be used here
 export const getMyOrders = asyncError(async (req, res, next) => {
   const orders = await Order.find({
     user: req.user.id,

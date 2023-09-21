@@ -9,12 +9,12 @@ export const myProfile = (req, res, next) => {
 
 // Register a new user
 export const registerUser = asyncError(async (req, res, next) => {
-  const { name, username, password } = req.body;
+  const { name, username, password, role } = req.body;
   const user = new User({ name, username, password });
 
   await user.save();
 
-  const token = jwt.sign({ username, role: "user" }, process.env.JWT_SECRET, {
+  const token = jwt.sign({ username, role }, process.env.JWT_SECRET, {
     expiresIn: "1h",
   });
 
@@ -39,22 +39,10 @@ export const loginUser = asyncError(async (req, res, next) => {
       { expiresIn: "1hr" }
     );
 
-    res.cookie("token", token, {
-      secure: process.env.NODE_ENV === "development" ? false : true,
-      sameSite: process.env.NODE_ENV === "development" ? false : "none",
-    });
-    res.json({ message: "User Logged In" });
+    res.json({ message: "User Logged In", token });
   }
 });
 
-export const userLogout = asyncError(async (req, res, next) => {
-  res
-    .cookie("token", "", {
-      secure: process.env.NODE_ENV === "development" ? false : true,
-      sameSite: process.env.NODE_ENV === "development" ? false : "none",
-    })
-    .json({ message: "User Logged Out" });
-});
 
 // Admin Routes
 export const getAdminUsers = asyncError(async (req, res, next) => {

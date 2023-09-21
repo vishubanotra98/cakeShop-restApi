@@ -15,8 +15,6 @@ import {
 
 const router = express.Router();
 
-
-
 router.post("/createorder", authenticateToken, placeOrder);
 
 router.post("/createorderonline", authenticateToken, placeOrderOnline);
@@ -26,8 +24,6 @@ router.post("/paymentverification", authenticateToken, paymentVerifivcation);
 router.get("/myorders", authenticateToken, getMyOrders);
 
 router.get("/order/:id", authenticateToken, getOrderDetails);
-
-
 
 // Add Admin Middleware
 router.get("/admin/orders", authenticateToken, authorizeAdmin, getAdminOrders);

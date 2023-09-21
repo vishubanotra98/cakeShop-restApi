@@ -4,27 +4,21 @@ const schema = new mongoose.Schema({
   shippingInfo: {
     hNo: {
       type: String,
-      required: true,
     },
     city: {
       type: String,
-      required: true,
     },
     state: {
       type: String,
-      required: true,
     },
     country: {
       type: String,
-      required: true,
     },
     pincode: {
       type: Number,
-      required: true,
     },
     phoneNo: {
       type: Number,
-      required: true,
     },
   },
 
