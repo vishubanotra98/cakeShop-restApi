@@ -15,7 +15,7 @@ export const authenticateToken = (req, res, next) => {
       }
     });
   } else {
-    res.status(403).json({ message: "Forbidden" });
+    res.status(403).json({ message: "User not logged in." });
   }
 };
 
