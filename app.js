@@ -10,6 +10,17 @@ dotenv.config({
   path: "./config/config.env",
 });
 
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS"
+  );
+
+  next();
+});
+
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 // app.use(cookieParser());
 
@@ -20,8 +31,7 @@ app.use(
   })
 );
 
-app.set("trust proxy")
-
+app.set("trust proxy");
 
 // Importing Routes
 import userRoute from "./routes/userRoute.js";

@@ -10,7 +10,7 @@ export const myProfile = (req, res, next) => {
 // Register a new user
 export const registerUser = asyncError(async (req, res, next) => {
   const { name, username, password, role } = req.body;
-  const user = new User({ name, username, password });
+  const user = new User({ name, username, password, role });
 
   await user.save();
 
