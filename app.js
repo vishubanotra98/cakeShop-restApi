@@ -11,7 +11,7 @@ dotenv.config({
 });
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "https://thecakeapp.netlify.app");
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
 
   res.setHeader(
     "Access-Control-Allow-Methods",
@@ -21,7 +21,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(cors({ credentials: true, origin: "https://thecakeapp.netlify.app" }));
+app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 // app.use(cookieParser());
 
 app.use(express.json());
