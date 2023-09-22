@@ -11,7 +11,10 @@ dotenv.config({
 });
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://vishucakeshop.netlify.app"
+  );
 
   res.setHeader(
     "Access-Control-Allow-Methods",
@@ -21,8 +24,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
-// app.use(cookieParser());
+app.use(
+  cors({ credentials: true, origin: "https://vishucakeshop.netlify.app" })
+);
 
 app.use(express.json());
 app.use(
