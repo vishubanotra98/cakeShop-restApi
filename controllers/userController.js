@@ -1,5 +1,6 @@
 import { User } from "../models/User.js";
 import { Order } from "../models/Order.js";
+import { Contact } from "../models/Contact.js";
 import { asyncError } from "../middlewares/errorMiddleware.js";
 import jwt from "jsonwebtoken";
 
@@ -43,7 +44,6 @@ export const loginUser = asyncError(async (req, res, next) => {
   }
 });
 
-
 // Admin Routes
 export const getAdminUsers = asyncError(async (req, res, next) => {
   const users = await User.find({});
@@ -79,5 +79,22 @@ export const getAdminStats = asyncError(async (req, res, next) => {
       delivered: deliveredOrder.length,
     },
     totalIncome,
+  });
+});
+
+export const contactForm = asyncError(async (req, res, next) => {
+  const { name, email, message } = req.body;
+
+  const formDetails = new Contact(name, email, message);
+  await formDetails.save();
+
+  res.status(200).json({ success: true, message: "Message sent Successfully" });
+});
+
+export const adminForm = asyncError(async (req, res, next) => {
+  const messages = await Contact.find({});
+  res.status(200).json({
+    success: true,
+    messages,
   });
 });
