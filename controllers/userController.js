@@ -85,7 +85,7 @@ export const getAdminStats = asyncError(async (req, res, next) => {
 export const contactForm = asyncError(async (req, res, next) => {
   const { name, email, message } = req.body;
 
-  const formDetails = new Contact(name, email, message);
+  const formDetails = new Contact({name, email, message});
   await formDetails.save();
 
   res.status(200).json({ success: true, message: "Message sent Successfully" });
