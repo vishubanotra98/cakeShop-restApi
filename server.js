@@ -3,7 +3,7 @@ import { connectDB } from "./config/database.js";
 
 import Razorpay from "razorpay";
 
-connectDB();
+await connectDB();
 
 export const instance = new Razorpay({
   key_id: process.env.RAZORPAY_API_KEY,

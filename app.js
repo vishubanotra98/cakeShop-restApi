@@ -10,24 +10,12 @@ dotenv.config({
   path: "./config/config.env",
 });
 
-app.use((req, res, next) => {
-  res.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://vishucakeshop.netlify.app"
-  );
+const allowedOrigins = [
+  "https://vishucakeshop.netlify.app",
+  "http://localhost:3000",
+];
 
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, OPTIONS"
-  );
-
-  next();
-});
-
-app.use(
-  cors({ credentials: true, origin: "https://vishucakeshop.netlify.app" })
-);
-
+app.use(cors({ credentials: true, origin: allowedOrigins }));
 app.use(express.json());
 app.use(
   urlencoded({

@@ -5,21 +5,30 @@ import { asyncError } from "../middlewares/errorMiddleware.js";
 import jwt from "jsonwebtoken";
 
 export const myProfile = (req, res, next) => {
-  res.status(200).json({ success: true, user: req.user });
+  return res.status(200).json({ status: 200, success: true, user: req.user });
 };
 
 // Register a new user
 export const registerUser = asyncError(async (req, res, next) => {
   const { name, username, password, role } = req.body;
-  const user = new User({ name, username, password, role });
 
+  console.log(req.body);
+
+  let existingUser = await User.findOne({ username: username });
+
+  if (existingUser) {
+    return res.status(409).json({
+      status: 409,
+      errMsg: "User Already Exists.",
+    });
+  }
+
+  const user = new User({ name, username, password, role });
   await user.save();
 
-  const token = jwt.sign({ username, role }, process.env.JWT_SECRET, {
-    expiresIn: "1h",
-  });
-
-  res.status(201).json({ message: "User registered successfully", token });
+  res
+    .status(201)
+    .json({ status: 200, message: "User registered successfully" });
 });
 
 export const loginUser = asyncError(async (req, res, next) => {
@@ -27,7 +36,9 @@ export const loginUser = asyncError(async (req, res, next) => {
 
   const user = await User.findOne({ username, password });
   if (!user) {
-    res.json({ message: "User not found" });
+    res
+      .status(404)
+      .json({ status: 400, errMsg: "Username or Password is incorrect." });
   } else {
     const token = jwt.sign(
       {
@@ -40,7 +51,7 @@ export const loginUser = asyncError(async (req, res, next) => {
       { expiresIn: "1hr" }
     );
 
-    res.json({ message: "User Logged In", token });
+    res.status(200).json({ status: 200, message: "User Logged In", token });
   }
 });
 
@@ -49,6 +60,7 @@ export const getAdminUsers = asyncError(async (req, res, next) => {
   const users = await User.find({});
 
   res.status(200).json({
+    status: 200,
     success: true,
     users,
   });
@@ -85,7 +97,7 @@ export const getAdminStats = asyncError(async (req, res, next) => {
 export const contactForm = asyncError(async (req, res, next) => {
   const { name, email, message } = req.body;
 
-  const formDetails = new Contact({name, email, message});
+  const formDetails = new Contact({ name, email, message });
   await formDetails.save();
 
   res.status(200).json({ success: true, message: "Message sent Successfully" });

@@ -5,8 +5,6 @@ import { asyncError } from "../middlewares/errorMiddleware.js";
 import crypto from "crypto";
 import { Payment } from "../models/Payment.js";
 
-
-
 // Req.user will be used here
 export const placeOrder = asyncError(async (req, res, next) => {
   const {
@@ -19,7 +17,7 @@ export const placeOrder = asyncError(async (req, res, next) => {
     totalAmount,
   } = req.body;
 
-  const user = req.user.id
+  const user = req.user.id;
 
   const orderOption = {
     shippingInfo,
@@ -39,7 +37,6 @@ export const placeOrder = asyncError(async (req, res, next) => {
     message: "Order Placed Successfully via Cash on Delivery",
   });
 });
-
 
 // Req.user will use here
 export const placeOrderOnline = asyncError(async (req, res, next) => {
@@ -119,8 +116,7 @@ export const paymentVerifivcation = asyncError(async (req, res, next) => {
   }
 });
 
-
-// Getting Orders 
+// Getting Orders
 export const getMyOrders = asyncError(async (req, res, next) => {
   const orders = await Order.find({
     user: req.user.id,
@@ -128,6 +124,7 @@ export const getMyOrders = asyncError(async (req, res, next) => {
 
   if (orders.length) {
     res.status(200).json({
+      status: 200,
       success: true,
       orders,
     });
@@ -146,7 +143,7 @@ export const getOrderDetails = asyncError(async (req, res, next) => {
   });
 });
 
-//Admin getting Orders 
+//Admin getting Orders
 export const getAdminOrders = asyncError(async (req, res, next) => {
   const orders = await Order.find({}).populate("user", "name");
 
