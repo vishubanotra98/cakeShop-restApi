@@ -11,7 +11,7 @@ dotenv.config({
 });
 
 const allowedOrigins = [
-  "https://vishucakeshop.netlify.app",
+  "https://thecakeshopp.vercel.app",
   "http://localhost:3000",
 ];
 
