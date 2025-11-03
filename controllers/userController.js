@@ -11,9 +11,6 @@ export const myProfile = (req, res, next) => {
 // Register a new user
 export const registerUser = asyncError(async (req, res, next) => {
   const { name, username, password, role } = req.body;
-
-  console.log(req.body);
-
   let existingUser = await User.findOne({ username: username });
 
   if (existingUser) {
