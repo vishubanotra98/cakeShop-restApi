@@ -7,7 +7,7 @@ export const authenticateToken = (req, res, next) => {
     const token = authToken.split(" ")[1];
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
       if (err) {
-        return res.status(404).json({ status: 400, message: "Not found" });
+        return res.status(404).json({ status: 400, message: "User Not found" });
       } else {
         req.user = user;
         next();
